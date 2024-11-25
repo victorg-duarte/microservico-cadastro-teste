@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tc-cadastro-deployment
+  labels:
+    app: tc-cadastro-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tc-cadastro-deployment
+  template:
+    metadata:
+      labels:
+        app: tc-cadastro-deployment
+    spec:
+      containers:
+      - name: tc-cadastro-deployment
+        image: grupo28/tc-cadastro:latest
+        ports:
+        - containerPort: 5188
+        envFrom:
+        - configMapRef:
+            name: tc-cadastro-configmap
+        resources:
+          requests:
+            cpu: "100m" # 100m equivalent to 0.1 CPU
+            memory: "256Mi" # 256 megabytes
+          limits:
+            cpu: "500m" # 500m equivalent to 0.5 CPU
+            memory: "512Mi" # 512 megabytes
+        livenessProbe:
+          httpGet:
+            path: '/health'
+            port: 5188
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: '/health'
+            port: 5188
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          failureThreshold: 3

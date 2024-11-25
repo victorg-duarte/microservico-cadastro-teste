@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tc-cadastro-svc
+spec:
+  selector:
+    app: tc-cadastro-deployment
+  ports:
+    - port: 5188
+      targetPort: 5188
+  type: LoadBalancer
