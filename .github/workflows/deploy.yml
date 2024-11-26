@@ -1,7 +1,6 @@
 name: Deploy
 
 on:
-  workflow_dispatch:
   workflow_run:
     workflows: ["Build"]
     types: [completed]
@@ -28,14 +27,6 @@ jobs:
 
       - name: Set kubeconfig for Amazon EKS
         run: aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
-
-      # Verifica a conexão com o EKS
-      - name: Verify Kubernetes connection
-        run: kubectl get nodes
-
-      # Verifica o contexto do kubectl
-      - name: Check Kubernetes context
-        run: kubectl config current-context
 
       - name: Substitute secrets in ConfigMap
         run: |
